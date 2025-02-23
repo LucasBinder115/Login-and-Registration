@@ -1,0 +1,23 @@
+npm init -y para instalar o node.js
+---------------------------------------------
+npm install --save express morgan http-errors dotenv - para instalar as dependencias 
+e os outros software junto para programar  
+------------------------------------------------------------
+echo > app.js ou touch app.js quem usar linux para colocar o app.js 
+ou crie pelo proprio VScode tbm funciona
+--------------------------------------------------------------------------
+dentro do app.js eu coloquei esse codigo para linkar com os software instalados
+const express = require("express" )
+const morgan = require("morgan")
+const createError = require("http-errors")
+require("dotenv").config
+-----------------------------------------------------------------------------------
+Agora vamos linkar o .env com app.js para isso precisamos instalar a dependencia do .env no sistema 
+echo > .env
+----------------------------------------------------------------------------------------------
+colocaremos a linkagem com o codigo PORT= 3000 dentro do .env
+-----------------------------------------------------------------------------------------------
+no app.js colocaremos 
+const app = express()
+const PORT = process.env.PORT || 3000
+----------------------------------------------------------------------------------------------

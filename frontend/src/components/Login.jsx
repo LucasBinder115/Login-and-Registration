@@ -14,9 +14,13 @@ const Login = () => {
         email,
         password,
       });
-      setMessage(response.data.message);
+
+      console.log("Login bem-sucedido:", response.data);
+      setMessage("Login realizado com sucesso!");
+
     } catch (error) {
-      setMessage(error.response?.data?.error || "Erro ao fazer login");
+      console.error("Erro ao fazer login:", error.response?.data?.error || "Erro desconhecido");
+      setMessage("Falha no login. Verifique suas credenciais.");
     }
   };
 

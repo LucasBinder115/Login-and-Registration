@@ -5,6 +5,8 @@ require("dotenv").config(); // Correto: .config() é uma função e precisa ser 
 const AuthRoute = require("./Routes/Auth_route"); // Certifique-se de que o caminho do arquivo está correto
 require("./helpers/init_mongodb")
 const app = express();
+const cors = require("cors");
+
 
 // Middleware
 app.use(morgan("dev")); // Adicionei o middleware morgan para logs de requisições
@@ -33,6 +35,11 @@ app.use((err, req, res, next) => {
         },
     });
 });
+
+app.use(cors({
+    origin: "http://localhost:3001", // URL do frontend
+    credentials: true, // Permite cookies e autenticação
+  }));
 
 const PORT = process.env.PORT || 3000;
 

@@ -1,0 +1,118 @@
+Passo 1: Inicializando o projeto Node.js
+Primeiro, inicie o seu projeto com o comando:
+
+npm init -y
+Isso criará um arquivo package.json básico para o seu projeto.
+----------------------------------------------------------------
+Passo 2: Instalando as dependências
+Agora, instale as dependências necessárias para o projeto:
+npm install --save express morgan http-errors dotenv
+Essas dependências são para configurar o Express (framework de servidor), Morgan (para logs), http-errors (para erros HTTP) e dotenv (para gerenciar variáveis de ambiente).
+----------------------------------------------------------------
+Passo 3: Criando o arquivo app.js
+Em seguida, crie o arquivo app.js no seu projeto. Você pode fazer isso de duas formas:
+
+No terminal (Linux ou Mac):
+touch app.js
+No terminal (Windows):
+echo > app.js
+Ou, se preferir, crie o arquivo diretamente no VSCode.
+---------------------------------------------------------------
+Passo 4: Configurando o app.js
+Dentro do arquivo app.js, adicione o seguinte código para importar as dependências e configurar o Express:
+-----------------------------------------------------------------------------
+const express = require("express");
+const morgan = require("morgan");
+const createError = require("http-errors");
+require("dotenv").config();
+Essas linhas importam as dependências necessárias para o funcionamento do servidor.
+-------------------------------------------------------------------------------------
+Passo 5: Criando o arquivo .env
+Agora, crie um arquivo .env para armazenar variáveis de ambiente. Para isso, execute o comando:
+echo > .env
+Ou crie o arquivo manualmente.
+Dentro do arquivo .env, adicione a seguinte linha:
+PORT=3000
+Isso define a porta em que o servidor Express irá rodar.
+-------------------------------------------------------------------------------------------
+Passo 6: Configurando a variável PORT no app.js
+No arquivo app.js, adicione o seguinte código para configurar a variável de porta, buscando o valor do .env ou utilizando o valor padrão (3000):
+const app = express();
+const PORT = process.env.PORT || 3000;
+-------------------------------------------------------------------------------------------
+Passo 7: Rodando o servidor
+Agora, adicione o código para fazer o servidor escutar a porta configurada:
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
+------------------------------------------------------------------------------------------
+Passo 8: Iniciando o servidor
+Execute o servidor com o comando:
+npm start
+Você deverá ver a saída no terminal parecida com esta:
+
+less
+Copy
+Edit
+> login-and-registration@1.0.0 start
+> nodemon app.js
+
+[nodemon] 3.1.9
+[nodemon] to restart at any time, enter `rs`
+[nodemon] watching path(s): *.*
+[nodemon] watching extensions: js,mjs,cjs,json
+[nodemon] starting `node app.js`
+Server running on port 3000
+[nodemon] restarting due to changes...
+[nodemon] starting `node app.js`
+Se você vir essa mensagem, significa que o servidor está funcionando corretamente!
+-------------------------------------------------------------------------------------------
+Passo 9: Testando a API com REST Client
+Agora, instale a extensão REST Client no VSCode para testar a API diretamente no editor (sem precisar do Postman ou Insomnia).
+Crie um arquivo com o nome rest.http.
+Dentro do arquivo rest.http, adicione o seguinte código para testar a rota GET:
+http
+GET http://localhost:3000
+--------------------------------------------------------------------------------------------------
+Passo 10: Testando no REST Client
+Depois de salvar o arquivo rest.http, clique no link que aparece ao lado da linha de código GET http://localhost:3000 no VSCode para testar a requisição.
+coloquei esse codigo dentro do app.js para garantir que o servidor esta rodando corretamente
+app.get("/", async (req, res, next) => {
+    res.send("Hello From Express");
+});
+Se a API estiver funcionando corretamente, o REST Client deve mostrar um erro 404 Not Found, indicando que o servidor está recebendo a requisição, mas você ainda não criou rotas para ele.
+Se não aparecer nada, pode ser que o servidor não esteja rodando corretamente. Verifique se você deu um npm start antes de tentar a requisição.
+Dicas Importantes:
+Lembre-se de sempre executar npm start para garantir que o servidor esteja rodando antes de testar a API.
+Se o nodemon não estiver funcionando, tente rodar node app.js manualmente.
+-------------------------------------------------------------------------------------
+apos isso criei um localhost de teste para ver se esta tudo nos conformes
+###
+GET http://localhost:3000/abc_xyz
+------------------------------------------------------------------------------------
+no app.js adicionei o seguinte codigo para linkar esse localhost em especifico
+
+app.use(async (req, res, next) => {
+    const error = new Error('Not Found');
+    error.status = 404;
+    next(error);
+});
+
+app.use((err, req, res, next) => {
+    res.status(err.status || 500);
+    res.send({
+        error: {
+            status: err.status || 500,
+            message: err.message
+        }
+    });
+});
+---------------------------------------------------------------------------------------
+agora so dar um send request no codigo do rest e ver se esta funcionando tudo corretamente
+----------------------------------------------------------------------------------------
+agora criaremos uma pasta chamada routes
+--------------------------------------------------------------------------------------------
+
+
+
+

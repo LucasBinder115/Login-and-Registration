@@ -1,7 +1,7 @@
 GET http://localhost:3000
 
 ### Página de login do cliente
-GET http://localhost:3000/auth/login
+POST http://localhost:3000/auth/login
 
 ### Página de registro do cliente 
 POST http://localhost:3000/auth/register

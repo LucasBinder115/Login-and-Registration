@@ -1,77 +1,28 @@
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import { Routes, Route } from 'react-router-dom';
+import Login from './pages/Login.jsx';
+import Register from './pages/Register.jsx';
+import CreatePlaylist from './pages/CreatePlaylist.jsx';
+import Playlist from './pages/Playlist.jsx';
+import Songs from './pages/Songs.jsx';
+import UploadSong from './pages/UploadSong.jsx';
+import Home from './pages/Home.jsx';
+import MusicPlayer from './MusicPlayer.jsx';
 
-//Importing Components
-
-//Importing Contexts
-
-//General Layout
-const Layout = () => {
+function App() {
   return (
-    <div className="relative z-0 w-screen">
-      <SidebarContextState>
-        <SongContextState>
-          <FetchContextState>
-            <Navbar />
-            <QueueContextState>
-            <div className="">
-              <Outlet />
-            </div>
-            <div className="">
-              <AudioPlayer />
-            </div>
-            </QueueContextState>
-          </FetchContextState>
-        </SongContextState>
-      </SidebarContextState>
+    <div className="min-h-screen">
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/create-playlist" element={<CreatePlaylist />} />
+        <Route path="/playlist" element={<Playlist />} />
+        <Route path="/songs" element={<Songs />} />
+        <Route path="/upload-song" element={<UploadSong />} />
+      </Routes>
+      <MusicPlayer />
     </div>
   );
-};
+}
 
-//Routing
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Layout />,
-    children: [
-      {
-        path: "/",
-        element: <Home />,
-      },
-      {
-        path: "/upload",
-        element: <UploadSong />,
-      },
-      {
-        path: "/explore",
-        element: <Songs />,
-      },
-      {
-        path: "/playlists",
-        element: <CreatePlayList />,
-      },
-      {
-        path: "/playlist/:id",
-        element: <Playlist />,
-      },
-    ],
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/register",
-    element: <Register />,
-  },
-]);
-
-const App = () => {
-  return (
-    <>
-      <div className="flex justify-center items-center">
-        <RouterProvider router={router} />
-      </div>
-    </>
-  );
-};
 export default App;

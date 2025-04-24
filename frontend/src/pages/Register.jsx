@@ -1,97 +1,54 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-const Register = () => {
-  const [inputs, setInputs] = useState({
-    fullName: "",
-    email: "",
-    password: "",
-  });
-  const navigate = useNavigate();
-  const [err, setErr] = useState(null);
-  const handleChange = (e) => {
-    setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-  let __URL__ ;
-  if ( document.domain === "localhost" ) {
-    __URL__ = "http://localhost:1337";
-  } else {
-    __URL__ = "https://music-player-app-backend-yq0c.onrender.com";
-  }
+function Register() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch(`${__URL__}/api/v1/auth/register`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(inputs),
-    });
-    const data = await res.json();
-    if (data.status === "error") setErr(data.message);
-    if (data.status === "success") {
-      alert("Registration Successful");
-      navigate("/login");
+    try {
+      await axios.post('YOUR_API_URL/register', { name, email, password });
+      navigate('/login');
+    } catch (error) {
+      console.error('Registration failed:', error);
     }
-    setInputs({
-      fullName: "",
-      email: "",
-      password: "",
-    })
   };
 
   return (
-    <div className="w-full h-screen flex justify-center items-center  bg-purple-900">
-      <form
-        className=" bg-white flex flex-col px-5 py-10
-      shadow-2xl rounded-xl"
-        onSubmit={handleSubmit}
-      >
-        <h1 className="text-center text-purple-800 text-2xl -mt-5 underline underline-offset-2 font-mono">
+    <div className="flex items-center justify-center min-h-screen">
+      <form onSubmit={handleSubmit} className="p-6 bg-white rounded shadow-md">
+        <h2 className="text-2xl font-bold mb-4">Register</h2>
+        <input
+          type="text"
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="block w-full p-2 mb-4 border rounded"
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="block w-full p-2 mb-4 border rounded"
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="block w-full p-2 mb-4 border rounded"
+        />
+        <button type="submit" className="w-full p-2 bg-green-500 text-white rounded">
           Register
-        </h1>
-        <div className="flex flex-col space-y-5 p-5 rounded-xl">
-          <input
-            type="text"
-            placeholder="Full Name"
-            name="fullName"
-            className="border border-b-blue-900 outline-none rounded-sm placeholder:px-1 h-8"
-            required
-            onChange={handleChange}
-          />
-          <input
-            type="email"
-            placeholder="Email"
-            name="email"
-            className="border border-b-blue-900 outline-none rounded-sm placeholder:px-1 h-8"
-            required
-            onChange={handleChange}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            name="password"
-            className="border border-b-blue-900 outline-none rounded-sm placeholder:px-1 h-8"
-            required
-            onChange={handleChange}
-          />
-
-          {err && <p className="text-red-500">{err}</p>}
-          <button
-            type="submit"
-            className="bg-purple-800 text-white py-1 rounded-sm shadow-md hover:bg-purple-900 hover:tracking-wider font-mono"
-          >
-            Submit
-          </button>
-          <div className="flex justify-center items-center">
-            <p>already have an account?</p>
-            <Link to="/login" className="text-gray-900">Login</Link>
-          </div>
-        </div>
+        </button>
       </form>
     </div>
   );
-};
+}
 
 export default Register;

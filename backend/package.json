@@ -1,30 +1,30 @@
 {
-  "name": "login-and-registration",
+  "name": "backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "type": "module",
+  "description": "Backend for music streaming web-app",
+  "main": "server.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ProjetoRhytmo/Login-and-Registration.git"
-  },
-  "keywords": [],
-  "author": "",
+  "author": "Manish Kumar",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ProjetoRhytmo/Login-and-Registration/issues"
-  },
-  "homepage": "https://github.com/ProjetoRhytmo/Login-and-Registration#readme",
-  "description": "",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "http-errors": "^2.0.0",
-    "login-and-registration": "file:",
-    "mongoose": "^8.10.1",
-    "morgan": "^1.10.0",
-    "nodemon": "^3.1.9"
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "fs": "^0.0.1-security",
+    "gridfs-stream": "^1.1.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.3.0",
+    "mongoose": "^6.12.3",
+    "multer": "^1.4.4",
+    "multer-gridfs-storage": "^5.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
   }
 }

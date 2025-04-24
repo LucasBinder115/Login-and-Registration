@@ -2,6 +2,28 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setCurrentSong } from '../Context/store';
+import SongCard from '../components/SongCard';
+
+function Songs() {
+  const [songs, setSongs] = useState([]);
+  const dispatch = useDispatch();
+
+  const playSong = (song) => {
+    dispatch(setCurrentSong(song));
+  };
+
+  // ... resto do código
+  return (
+    <div className="p-6">
+      <h2 className="text-2xl font-bold mb-4">Songs</h2>
+      <ul className="space-y-4">
+        {songs.map((song) => (
+          <SongCard key={song.id} song={song} onPlay={playSong} />
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 function Songs() {
   const [songs, setSongs] = useState([]);

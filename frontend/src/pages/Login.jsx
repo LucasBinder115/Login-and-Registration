@@ -3,7 +3,12 @@ import { useDispatch } from 'react-redux';
 import { login } from '../Context/store';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Button from '../components/Button';
 
+// Dentro do form:
+<Button type="submit" variant="primary" className="w-full">
+  Login
+</Button>
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

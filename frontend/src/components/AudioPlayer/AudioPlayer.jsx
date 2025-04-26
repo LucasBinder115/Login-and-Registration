@@ -11,7 +11,7 @@ import WaveSurfer from "wavesurfer.js";
 
 // const LEN = 1000000;
 
-function AudioPlayer({ toggleDisplayUploader, filePath }) {
+function AudioPlayer({ filePath }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [isMute, setIsMute] = useState(false);

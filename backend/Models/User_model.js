@@ -1,19 +1,20 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose');
 
-const UserSchema = new Schema({
-    email: {
-        type: String, // "String" com S maiúsculo
-        required: true, // "required" com dois pontos e valor booleano
-        lowercase: true, // "lowercase" com dois pontos e valor booleano
-        unique: true // "unique" com dois pontos e valor booleano
-    },
-    password: {
-        type: String, // "String" com S maiúsculo
-        required: true // "required" com dois pontos e valor booleano
-    }
-});
+const userSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  password: {
+    type: String,
+    required: true
+  },
+  tipo: {
+    type: String,
+    enum: ['admin', 'comum'],
+    default: 'comum'
+  }
+}, { timestamps: true });
 
-const User = mongoose.model("User", UserSchema); // Nome do modelo em maiúsculo e schema correto
-
-module.exports = User; // Exporta o modelo para uso em outros arquivos
+module.exports = mongoose.model('User', userSchema);

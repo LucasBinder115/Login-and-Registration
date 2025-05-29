@@ -1,48 +1,18 @@
-const express = require("express");
-const morgan = require("morgan");
-const createError = require("http-errors");
-require("dotenv").config(); // Correto: .config() é uma função e precisa ser chamada
-const AuthRoute = require("./Routes/Auth_route"); // Certifique-se de que o caminho do arquivo está correto
-require("./helpers/init_mongodb")
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
+require('dotenv').config();
+
 const app = express();
-const cors = require("cors");
-
-
-// Middleware
-app.use(morgan("dev")); // Adicionei o middleware morgan para logs de requisições
-app.use(express.json()); // Middleware para parsear JSON no body das requisições
-
-// Rota de teste
-app.get("/", async (req, res, next) => {
-    res.send("Hello From Express");
-});
-
-// Rotas de autenticação
-app.use("/auth", AuthRoute); // Corrigido: Use "/auth" em vez de "./auth"
-
-// Rota 404 (para rotas não encontradas)
-app.use(async (req, res, next) => {
-    next(createError.NotFound());
-});
-
-// Tratamento de erros
-app.use((err, req, res, next) => {
-    res.status(err.status || 500);
-    res.send({
-        error: {
-            status: err.status || 500,
-            message: err.message,
-        },
-    });
-});
 
 app.use(cors({
-    origin: "http://localhost:3001", // URL do frontend
-    credentials: true, // Permite cookies e autenticação
-  }));
+  origin: 'http://localhost:3000', 
+  credentials: true
+}));
+app.use(express.json());
+app.use(cookieParser());
 
-const PORT = process.env.PORT || 3000;
+const authRoutes = require('./routes/authRoutes');
+app.use('/auth', authRoutes);
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`); // Correto: Use template literals (crase)
-});
+module.exports = app;

@@ -7,16 +7,33 @@ import {
 } from '../services/tokenService.js';
 
 const register = async (req, res) => {
-  const { username, password, tipo } = req.body;
+  const { fullName, email, tipo } = req.body;
 
-  if (!username || !password || !tipo)
-    return res.status(400).json({ error: "Todos os campos são obrigatórios" });
+  if (!fullName || !email)
+    return res.status(400).json({ error: "Campos fullName e email são obrigatórios" });
 
-  const existe = await User.findOne({ username });
-  if (existe) return res.status(409).json({ error: "Usuário já existe" });
+  const existe = await User.findOne({ email });
+  if (existe) return res.status(409).json({ error: "Email já existe" });
 
-  const hash = await bcrypt.hash(password, 10);
-  const novoUsuario = await User.create({ username, password: hash, tipo });
+  const novoUsuario = await User.create({ fullName, email, tipo: tipo || 'comum' });
+
+  const payload = { id: novoUsuario._id, email, tipo: novoUsuario.tipo };
+  const accessToken = gerarAccessToken(payload);
+  const refreshToken = gerarRefreshToken(payload);
+
+  res.cookie("accessToken", accessToken, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "strict",
+    maxAge: 15 * 60 * 1000,
+  });
+
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "strict",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
 
   res.status(201).json({ message: "Usuário registrado", id: novoUsuario._id });
 };

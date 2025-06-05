@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home/Home";
+import Home from "./pages/Home/index";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
-import AudioPlayerPage from "./pages/AudioPlayer/AudioPlayerPage";
-import Uploader from "./components/Uploader/Uploader";
-import NotFound from "./pages/NotFound/NotFound";
-import "./App.css";
+import AudioPlayerPage from "./components/AudioPlayer/AudioPlayer";
+import Uploader from "./components/Uploader/index";
+import NotFound from "./pages/NotFound/Notfound";
+import "./index.css";
 
 function App() {
   const [audioPath, setAudioPath] = useState(() => {

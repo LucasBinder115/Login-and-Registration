@@ -4,11 +4,11 @@ import dotenv from "dotenv";
 import path from "path";
 import mongoose from "mongoose";
 
-import authRoutes from "./routes/authRoutes.js";
+import authRoutes from "./routes/Auth_route.js";
 import songRoutes from "./routes/songRoutes.js";
 import playlistRoutes from "./routes/playlistRoutes.js";
 import { getSongs, streamSong } from "./controllers/songController.js";
-import { userJwtMiddleware } from "./middlewares/authMiddleware.js";
+import userJwtMiddleware from "./middlewares/auth.js";
 
 dotenv.config();
 

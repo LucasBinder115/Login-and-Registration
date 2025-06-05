@@ -7,4 +7,4 @@ const autorizar = (...tiposPermitidos) => {
   };
 };
 
-module.exports = autorizar;
+export default autorizar;

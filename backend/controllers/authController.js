@@ -1,12 +1,12 @@
-const User = require('../models/User_model');
-const bcrypt = require('bcryptjs');
-const {
+import User from '../Models/User_model.js';
+import bcrypt from 'bcryptjs';
+import {
   gerarAccessToken,
   gerarRefreshToken,
   verificarRefreshToken
-} = require('../services/tokenService');
+} from '../services/tokenService.js';
 
-exports.register = async (req, res) => {
+const register = async (req, res) => {
   const { username, password, tipo } = req.body;
 
   if (!username || !password || !tipo)
@@ -21,7 +21,7 @@ exports.register = async (req, res) => {
   res.status(201).json({ message: "Usuário registrado", id: novoUsuario._id });
 };
 
-exports.login = async (req, res) => {
+const login = async (req, res) => {
   const { username, password } = req.body;
   const usuario = await User.findOne({ username });
 
@@ -50,7 +50,7 @@ exports.login = async (req, res) => {
   res.status(200).json({ message: "Login realizado" });
 };
 
-exports.refresh = async (req, res) => {
+const refresh = async (req, res) => {
   const refreshToken = req.cookies.refreshToken;
   if (!refreshToken) return res.status(401).json({ error: "Refresh token ausente" });
 
@@ -71,8 +71,10 @@ exports.refresh = async (req, res) => {
   }
 };
 
-exports.logout = (req, res) => {
+const logout = (req, res) => {
   res.clearCookie("accessToken");
   res.clearCookie("refreshToken");
   res.status(200).json({ message: "Logout realizado" });
 };
+
+export default { register, login, refresh, logout };

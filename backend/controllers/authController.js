@@ -7,35 +7,58 @@ import {
 } from '../services/tokenService.js';
 
 const register = async (req, res) => {
-  const { fullName, email, tipo } = req.body;
+  try {
+    const { email, username, password, tipo } = req.body;
 
-  if (!fullName || !email)
-    return res.status(400).json({ error: "Campos fullName e email são obrigatórios" });
+    // Validate required fields
+    if (!email || !username || !password) {
+      return res.status(400).json({ error: "Campos email, username e password são obrigatórios" });
+    }
 
-  const existe = await User.findOne({ email });
-  if (existe) return res.status(409).json({ error: "Email já existe" });
+    // Check if email or username already exists
+    const emailExists = await User.findOne({ email });
+    if (emailExists) return res.status(409).json({ error: "Email já existe" });
 
-  const novoUsuario = await User.create({ fullName, email, tipo: tipo || 'comum' });
+    const usernameExists = await User.findOne({ username });
+    if (usernameExists) return res.status(409).json({ error: "Username já existe" });
 
-  const payload = { id: novoUsuario._id, email, tipo: novoUsuario.tipo };
-  const accessToken = gerarAccessToken(payload);
-  const refreshToken = gerarRefreshToken(payload);
+    // Hash the password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-  res.cookie("accessToken", accessToken, {
-    httpOnly: true,
-    secure: true,
-    sameSite: "strict",
-    maxAge: 15 * 60 * 1000,
-  });
+    // Create new user
+    const novoUsuario = await User.create({
+      email,
+      username,
+      password: hashedPassword,
+      tipo: tipo || "comum",
+    });
 
-  res.cookie("refreshToken", refreshToken, {
-    httpOnly: true,
-    secure: true,
-    sameSite: "strict",
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-  });
+    // Generate tokens
+    const payload = { id: novoUsuario._id, email, tipo: novoUsuario.tipo };
+    const accessToken = gerarAccessToken(payload);
+    const refreshToken = gerarRefreshToken(payload);
 
-  res.status(201).json({ message: "Usuário registrado", id: novoUsuario._id });
+    // Set cookies
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 15 * 60 * 1000,
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    res.status(201).json({ message: "Usuário registrado", id: novoUsuario._id });
+  } catch (error) {
+    console.error("Error in register:", error);
+    res.status(500).json({ error: "Erro ao registrar usuário" });
+  }
 };
 
 const login = async (req, res) => {
@@ -52,14 +75,14 @@ const login = async (req, res) => {
 
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
     maxAge: 15 * 60 * 1000,
   });
 
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
@@ -77,7 +100,7 @@ const refresh = async (req, res) => {
 
     res.cookie("accessToken", novoAccess, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       maxAge: 15 * 60 * 1000,
     });

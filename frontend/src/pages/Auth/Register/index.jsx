@@ -1,38 +1,38 @@
-// src/pages/Auth/Register.jsx
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../../../components/Button';
 
 export default function Register() {
   const [formData, setFormData] = useState({
+    email: '',
     username: '',
     password: '',
-    tipo: 'comum', // Default to 'comum' as per User model
+    tipo: 'comum',
   });
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Sending formData:', formData); // Debug
+    console.log('Sending formData:', formData);
     try {
-      const response = await fetch('http://localhost:1337/api/v1/auth/register', {
+      const response = await fetch('/api/v1/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
+      const text = await response.text();
+      console.log('Raw response:', text);
       if (!response.ok) {
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.includes('application/json')) {
-          const result = await response.json();
+        try {
+          const result = JSON.parse(text);
           setError(result.error || `Erro: ${response.status}`);
-        } else {
+        } catch {
           setError(`Erro: Resposta inválida do servidor (${response.status})`);
-          console.log('Non-JSON response:', await response.text());
         }
         return;
       }
-      const result = await response.json();
+      const result = JSON.parse(text);
       setSuccess('Registro bem-sucedido!');
       setError(null);
     } catch (err) {
@@ -48,6 +48,18 @@ export default function Register() {
           Crie sua conta
         </h2>
         <form className="space-y-6" onSubmit={handleSubmit}>
+          <div>
+            <label className="block text-gray-700 mb-2">Email</label>
+            <input
+              type="email"
+              value={formData.email}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
+              className="w-full px-4 py-3 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              required
+            />
+          </div>
           <div>
             <label className="block text-gray-700 mb-2">Nome de usuário</label>
             <input

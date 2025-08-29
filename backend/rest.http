@@ -1,13 +1,13 @@
-GET http://localhost:3000
+GET http://localhost:5173
 
 ### Página de login do cliente
-POST http://localhost:3000/auth/login
+POST http://localhost:5173/auth/login
 
 ### Página de registro do cliente 
-POST http://localhost:3000/auth/register
+POST http://localhost:5173/auth/register
 
 ### Página de carregamento do cliente 
-POST http://localhost:3000/auth/refresh-token
+POST http://localhost:5173/auth/refresh-token
 
 ### Página de saida do cliente 
-DELETE http://localhost:3000/auth/logout
+DELETE http://localhost:5173/auth/logout

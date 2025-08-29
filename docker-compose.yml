@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  DB:
+    image: mongo
+    
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASS}
+      MONGO_INITDB_DATABASE: ${MONGO_DB_NAME}
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - "27017:27017"
+  backend:
+      image: tiagozie/backend_rhy:1.0
+      build: ./backend
+      environment:
+        database_url: ${MONGO_URI}
+        jwt_secret: ${JWT_SECRET}
+      ports:
+        - "5173:5173"
+      depends_on:
+        - DB
+  frontend:
+        image: tiagozie/frontend_rhy:1.0
+        build: ./frontend
+        command: "npm run dev -- --host 0.0.0.0 --port 1337 --strictPort"
+        depends_on:
+          - backend
+        ports:
+          - "1337:1337"
+
+volumes:
+  db_data: {}
+
+
+ 

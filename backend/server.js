@@ -16,27 +16,24 @@ const app = express();
 
 // Configure CORS
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: "http://0.0.0.0:1337", // frontend
   credentials: true,
 }));
 
-// Handle preflight OPTIONS requests
 app.options("*", cors());
-
-// Request logging
-app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
-  next();
-});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// MongoDB connection
+console.log("Trying to connect to MongoDB with URI:", process.env.MONGO_URI);
+
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected successfully"))
-  .catch((err) => console.error("MongoDB connection error:", err));
+  .catch((err) => {
+    console.error("MongoDB connection error:", err);
+    process.exit(1);
+  });
 
 app.use(express.static(path.join(path.resolve(), "public")));
 
@@ -50,6 +47,8 @@ app.get("*", (req, res) => {
   res.sendFile(path.resolve("public/index.html"));
 });
 
-app.listen(1337, () => {
-  console.log("Server is running at localhost:1337");
+// 👇 Ouvir em 0.0.0.0 para aceitar conexões externas
+const PORT = process.env.PORT || 5173;
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server is running at 0.0.0.0:${PORT}`);
 });

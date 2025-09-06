@@ -47,7 +47,7 @@ app.get("*", (req, res) => {
   res.sendFile(path.resolve("public/index.html"));
 });
 
-// 👇 Ouvir em 0.0.0.0 para aceitar conexões externas
+//  Ouvir em 0.0.0.0 para aceitar conexões externas
 const PORT = process.env.PORT || 5173;
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server is running at 0.0.0.0:${PORT}`);

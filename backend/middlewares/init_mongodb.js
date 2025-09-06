@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 mongoose
-  .connect(process.env.MONGODB_URI, {
-    dbName: process.env.DB_NAME,
+  .connect(process.env.MONGO_URI, {
+    dbName: process.env.MONGO_DB_NAME=rhythmos,
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
